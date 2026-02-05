@@ -1,65 +1,200 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import {
+  PromptInput,
+  PromptInputBody,
+  PromptInputFooter,
+  PromptInputMessage,
+  PromptInputSubmit,
+  PromptInputTextarea,
+} from "@/components/ai-elements/prompt-input";
+import {
+  Conversation,
+  ConversationContent,
+  ConversationDownload,
+  ConversationEmptyState,
+  ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
+import { Message, MessageContent } from "@/components/ai-elements/message";
+import { useEffect, useState } from "react";
+import { nanoid } from "nanoid";
+import { MessageSquareIcon } from "lucide-react";
+
+const messages: {
+  key: string;
+  content: string;
+  role: "user" | "assistant";
+}[] = [
+  {
+    content: "Hello, how are you?",
+    key: nanoid(),
+    role: "user",
+  },
+  {
+    content: "I'm good, thank you! How can I assist you today?",
+    key: nanoid(),
+    role: "assistant",
+  },
+  {
+    content: "I'm looking for information about your services.",
+    key: nanoid(),
+    role: "user",
+  },
+  {
+    content:
+      "Sure! We offer a variety of AI solutions. What are you interested in?",
+    key: nanoid(),
+    role: "assistant",
+  },
+  {
+    content: "I'm interested in natural language processing tools.",
+    key: nanoid(),
+    role: "user",
+  },
+  {
+    content: "Great choice! We have several NLP APIs. Would you like a demo?",
+    key: nanoid(),
+    role: "assistant",
+  },
+  {
+    content: "Yes, a demo would be helpful.",
+    key: nanoid(),
+    role: "user",
+  },
+  {
+    content: "Alright, I can show you a sentiment analysis example. Ready?",
+    key: nanoid(),
+    role: "assistant",
+  },
+  {
+    content: "Yes, please proceed.",
+    key: nanoid(),
+    role: "user",
+  },
+  {
+    content: "Here is a sample: 'I love this product!' → Positive sentiment.",
+    key: nanoid(),
+    role: "assistant",
+  },
+  {
+    content: "Impressive! Can it handle multiple languages?",
+    key: nanoid(),
+    role: "user",
+  },
+  {
+    content: "Absolutely, our models support over 20 languages.",
+    key: nanoid(),
+    role: "assistant",
+  },
+  {
+    content: "How do I get started with the API?",
+    key: nanoid(),
+    role: "user",
+  },
+  {
+    content: "You can sign up on our website and get an API key instantly.",
+    key: nanoid(),
+    role: "assistant",
+  },
+  {
+    content: "Is there a free trial available?",
+    key: nanoid(),
+    role: "user",
+  },
+  {
+    content: "Yes, we offer a 14-day free trial with full access.",
+    key: nanoid(),
+    role: "assistant",
+  },
+  {
+    content: "What kind of support do you provide?",
+    key: nanoid(),
+    role: "user",
+  },
+  {
+    content: "We provide 24/7 chat and email support for all users.",
+    key: nanoid(),
+    role: "assistant",
+  },
+  {
+    content: "Thank you for the information!",
+    key: nanoid(),
+    role: "user",
+  },
+  {
+    content: "You're welcome! Let me know if you have any more questions.",
+    key: nanoid(),
+    role: "assistant",
+  },
+];
+export default function Page() {
+  const [visibleMessages, setVisibleMessages] = useState<
+    {
+      key: string;
+      content: string;
+      role: "user" | "assistant";
+    }[]
+  >([]);
+  useEffect(() => {
+    let currentIndex = 0;
+    const interval = setInterval(() => {
+      if (currentIndex < messages.length && messages[currentIndex]) {
+        const currentMessage = messages[currentIndex];
+        setVisibleMessages((prev) => [
+          ...prev,
+          {
+            content: currentMessage.content,
+            key: currentMessage.key,
+            role: currentMessage.role,
+          },
+        ]);
+        currentIndex += 1;
+      } else {
+        clearInterval(interval);
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+  const handleSubmit = (message: PromptInputMessage) => {
+    // Handle submit
+    console.log(message);
+  };
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <main className="flex h-screen flex-col">
+      {/* message area */}
+      <Conversation className="relative flex-1 no-scrollbar h-full">
+        <ConversationContent className="max-w-5xl mx-auto pb-4">
+          {visibleMessages.length === 0 ? (
+            <ConversationEmptyState
+              description="Messages will appear here as the conversation progresses."
+              icon={<MessageSquareIcon className="size-6" />}
+              title="Start a conversation"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          ) : (
+            visibleMessages.map(({ key, content, role }) => (
+              <Message from={role} key={key}>
+                <MessageContent>{content}</MessageContent>
+              </Message>
+            ))
+          )}
+        </ConversationContent>
+        <ConversationDownload messages={visibleMessages} />
+        <ConversationScrollButton />
+      </Conversation>
+
+      {/* prompt input */}
+      <PromptInput
+        onSubmit={handleSubmit}
+        className="border-t max-w-5xl mx-auto"
+      >
+        <PromptInputBody>
+          <PromptInputTextarea placeholder="What's on your mind . . ." />
+        </PromptInputBody>
+        <PromptInputFooter className="justify-end">
+          <PromptInputSubmit />
+        </PromptInputFooter>
+      </PromptInput>
+    </main>
   );
 }
