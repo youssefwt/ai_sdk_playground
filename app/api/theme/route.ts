@@ -1,12 +1,12 @@
 import { UIMessage, createAgentUIStreamResponse } from "ai";
-import { mainAgent } from "@/agents/main";
+import { themeGenerator } from "@/agents/themeGenerator";
 
 export async function POST(req: Request) {
   try {
     const { messages }: { messages: UIMessage[] } = await req.json();
 
     return createAgentUIStreamResponse({
-      agent: mainAgent,
+      agent: themeGenerator,
       uiMessages: messages,
     });
   } catch (error) {

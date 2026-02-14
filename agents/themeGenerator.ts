@@ -1,12 +1,12 @@
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { ToolLoopAgent } from "ai";
-import { tools } from "@/tools";
+import { tools } from "@/tools/themeGenerator";
 
 const openrouter = createOpenRouter({
   apiKey: process.env.OPEN_ROUTER_API_KEY,
 });
 
-export const mainAgent = new ToolLoopAgent({
+export const themeGenerator = new ToolLoopAgent({
   model: openrouter("arcee-ai/trinity-large-preview:free"),
   instructions: `
     You are a helpful coding assistant.
